@@ -53,8 +53,9 @@ func videojuegosHandler(db *sql.DB, w http.ResponseWriter, r *http.Request){
 		getVideojuegos(db, w, r)	
 	case http.MethodPost:
 		saveVideojuego(db, w, r)
+	case http.MethodDelete:
+		deleteVideojuego(db, w, r)
 	}
-	
 }
 
 func getVideojuegos(db *sql.DB, w http.ResponseWriter, r *http.Request){
@@ -141,6 +142,34 @@ func saveVideojuego(db *sql.DB, w http.ResponseWriter, r *http.Request){
 	}
 
 	writeJSON(w, http.StatusOK, newVideojuego)
+}
+
+func deleteVideojuego(db *sql.DB, w http.ResponseWriter, r *http.Request) {
+	path := strings.TrimPrefix(r.URL.Path, "/api/videojuegos/")
+	id := strings.Trim(path, "/")
+
+	if id == "" {
+		http.Error(w, "Parametro id necesario para eliminar un videojuego", http.StatusBadRequest)
+		return
+	} else{
+		result, err := db.Exec("DELETE FROM Videojuegos WHERE id = ?", id)
+		if err != nil {
+			http.Error(w, "Error al eliminar el videojuego", http.StatusInternalServerError)
+			return
+		}
+		rowsAffected, err := result.RowsAffected()
+		if err != nil {
+			http.Error(w, "Error verificando eliminacion", http.StatusInternalServerError)
+			return
+		}
+
+		if rowsAffected == 0 {
+			writeJSON(w, http.StatusNotFound, Message{"Videojuego no encontrado"})
+			return
+		}
+
+		writeJSON(w, http.StatusOK, Message{"Videojuego eliminado correctamente"})
+	}
 }
 
 func writeJSON(w http.ResponseWriter, status int, payload interface{}) {
