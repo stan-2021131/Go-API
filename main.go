@@ -53,6 +53,8 @@ func videojuegosHandler(db *sql.DB, w http.ResponseWriter, r *http.Request){
 		getVideojuegos(db, w, r)	
 	case http.MethodPost:
 		saveVideojuego(db, w, r)
+	case http.MethodPut:
+		updateVideojuego(db,w,r)
 	case http.MethodDelete:
 		deleteVideojuego(db, w, r)
 	}
@@ -123,6 +125,7 @@ func saveVideojuego(db *sql.DB, w http.ResponseWriter, r *http.Request){
 
 	if newVideojuego.NOMBRE == "" || newVideojuego.PUBLICADO == 0 || newVideojuego.PLATAFORMAS == "" || newVideojuego.GENERO == "" || newVideojuego.DESARROLLADOR == "" {
 		http.Error(w, "Parametros faltantes", http.StatusBadRequest)
+		return
 	}
 	result, err := db.Exec("INSERT INTO Videojuegos(nombre, publicado, genero, plataformas, desarrollador) VALUES (?, ?, ?, ?, ?)",
 		newVideojuego.NOMBRE,
@@ -142,6 +145,55 @@ func saveVideojuego(db *sql.DB, w http.ResponseWriter, r *http.Request){
 	}
 
 	writeJSON(w, http.StatusOK, newVideojuego)
+}
+
+func updateVideojuego(db *sql.DB, w http.ResponseWriter, r *http.Request) {
+	path := strings.TrimPrefix(r.URL.Path, "/api/videojuegos/")
+	id := strings.Trim(path, "/")
+	
+	if id == "" {
+		http.Error(w, "Parametro id necesario para actualizar un videojuego", http.StatusBadRequest)
+		return
+	}
+
+	var newVideojuego Videojuego
+	
+	err := json.NewDecoder(r.Body).Decode(&newVideojuego)
+	if err != nil{
+		http.Error(w, "Estructura invalida JSON", http.StatusBadRequest)
+		return
+	}
+
+	if newVideojuego.NOMBRE == "" || newVideojuego.PUBLICADO == 0 || newVideojuego.PLATAFORMAS == "" || newVideojuego.GENERO == "" || newVideojuego.DESARROLLADOR == "" {
+		http.Error(w, "Parametros faltantes", http.StatusBadRequest)
+		return
+	}
+
+	result, err := db.Exec(`UPDATE Videojuegos 
+		SET  nombre = ?, publicado = ?, genero = ?, plataformas = ?, desarrollador = ? 
+		WHERE id = ?`, 
+		newVideojuego.NOMBRE,
+		newVideojuego.PUBLICADO,
+		newVideojuego.GENERO,
+		newVideojuego.PLATAFORMAS,
+		newVideojuego.DESARROLLADOR,
+		id)
+	if err != nil {
+		http.Error(w, "Error al actualizar el videojuego", http.StatusInternalServerError)
+		return
+	}
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		http.Error(w, "Error verificando eliminacion", http.StatusInternalServerError)
+		return
+	}
+
+	if rowsAffected == 0 {
+		writeJSON(w, http.StatusNotFound, Message{"Videojuego no encontrado"})
+		return
+	}
+
+	writeJSON(w, http.StatusOK, Message{"Videojuego actualizado correctamente"})
 }
 
 func deleteVideojuego(db *sql.DB, w http.ResponseWriter, r *http.Request) {
