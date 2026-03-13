@@ -1,0 +1,164 @@
+{
+  "info": {
+    "_postman_id": "7404cbec-f42c-4db3-808e-e155b1d05d71",
+    "name": "Go-API",
+    "description": "Consultas de prueba para el API Json con GO",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "29352559"
+  },
+  "item": [
+    {
+      "name": "Get-All",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:24759/api/videojuegos",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "24759",
+          "path": [
+            "api",
+            "videojuegos"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get-QueryParams",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:24759/api/videojuegos/?genero=Carreras&publicado=2003",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "24759",
+          "path": [
+            "api",
+            "videojuegos",
+            ""
+          ],
+          "query": [
+            {
+              "key": "genero",
+              "value": "Carreras"
+            },
+            {
+              "key": "publicado",
+              "value": "2003"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get-ByID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:24759/api/videojuegos/10",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "24759",
+          "path": [
+            "api",
+            "videojuegos",
+            "10"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get-ByID Copy",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nombre\": \"Need for Speed Underground Remastered\",\r\n  \"publicado\": 2004,\r\n  \"genero\": \"Carreras Arcade\",\r\n  \"plataformas\": \"PC, PS2, GameCube, Xbox\",\r\n  \"desarrollador\": \"EA Black Box Studios\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:24759/api/videojuegos/11",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "24759",
+          "path": [
+            "api",
+            "videojuegos",
+            "11"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get-ByID Copy",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:24759/api/videojuegos/11",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "24759",
+          "path": [
+            "api",
+            "videojuegos",
+            "11"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add-Videojuego",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nombre\": \"Need for Speed Underground\",\r\n  \"publicado\": 2003,\r\n  \"genero\": \"Carreras\",\r\n  \"plataformas\": \"PC, PS2, GameCube\",\r\n  \"desarrollador\": \"EA Black Box\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:24759/api/videojuegos/",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "24759",
+          "path": [
+            "api",
+            "videojuegos",
+            ""
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

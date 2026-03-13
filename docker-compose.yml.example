@@ -5,4 +5,5 @@ services:
     ports:
       - "24759:24759"
     volumes:
-      - .:/app
+      - ./Database:/app/Database
+      - ./main.go:/app/main.go
